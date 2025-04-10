@@ -19,7 +19,7 @@ const Sidebar: React.FC = () => {
       {/* Toggle Button */}
       <button 
         onClick={toggleSidebar} 
-        className="fixed top-4 right-40 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full p-2 z-50 shadow-lg hover:from-blue-600 hover:to-purple-600 transition"
+        className="fixed top-4 right-10 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full p-2 z-50 shadow-lg hover:from-blue-600 hover:to-purple-600 transition"
       >
         {isOpen ? '×' : '☰'}
       </button>

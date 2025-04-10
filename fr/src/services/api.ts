@@ -196,6 +196,31 @@ export async function sendMessageToChatbot(message: string): Promise<string> {
   }
 }
 
+/**
+ * Get saved resumes from the backend
+ * @returns Promise with the saved resumes data
+ */
+export const getSavedResumes = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No authentication token found');
+  }
+
+  const response = await fetch('http://localhost:5000/api/get-saved-resumes', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch saved resumes');
+  }
+
+  return response.json();
+};
+
 // Add the function to the default export
 export default {
   parseResumes,
@@ -203,4 +228,5 @@ export default {
   getJobMatches,
   searchResumes,
   sendMessageToChatbot, // Add this line
+  getSavedResumes, // Add this line
 };

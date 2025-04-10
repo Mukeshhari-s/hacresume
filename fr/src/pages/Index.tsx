@@ -20,6 +20,7 @@ const Index: React.FC = () => {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState<string>('');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -123,6 +124,24 @@ const Index: React.FC = () => {
     }
   }, [location.search, navigate]);
   
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    
+    if (token && userStr) {
+      setIsAuthenticated(true);
+      try {
+        const userData = JSON.parse(userStr);
+        setUserName(userData.name || 'User');
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    } else {
+      setIsAuthenticated(false);
+      setUserName('');
+    }
+  }, []);
+
   const handleFilesSelected = (files: FileWithPreview[]) => {
     setSelectedFiles(files);
   };
@@ -171,9 +190,8 @@ const Index: React.FC = () => {
   
   
   return (
-    <div className="min-h-screen">
-      
-      <div className="absolute top-4 right-4">
+    <div className="min-h-screen bg-gradient-to-b from-background to-blue-50 dark:from-background dark:to-gray-900 relative overflow-x-hidden">
+      <div className="absolute top-4 right-20">
         {!isAuthenticated ? (
           <Button
             onClick={() => navigate('/auth')} // Updated to navigate to the correct route
@@ -182,12 +200,17 @@ const Index: React.FC = () => {
             Login / Sign Up
           </Button>
         ) : (
-          <Button
-            onClick={() => navigate('/dashboard')}
-            className="bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:scale-105 transition-transform"
-          >
-            Go to Dashboard
-          </Button>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Welcome, {userName}
+            </span>
+            <Button
+              onClick={() => navigate('/dashboard')}
+              className="bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:scale-105 transition-transform"
+            >
+              Dashboard
+            </Button>
+          </div>
         )}
       </div>
       <div 
